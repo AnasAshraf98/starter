@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CrudController;
 use Illuminate\Support\Facades\Route;
+
 
 use Illuminate\Support\Facades\Auth;
 /*
@@ -27,4 +29,16 @@ Route::get('/',function(){
 
 Route::get('/dashboard',function(){
     return 'dashboard';
+});
+
+Route::get('fillable',[CrudController::class,'getOffers']);
+
+
+Route::group(['prefix' => Localization::setLocale(),
+'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]],function(){
+    Route::group(['prefix' => 'offers'],function(){
+        Route::get('create',[CrudController::class,'create']);
+        Route::post('store',[CrudController::class,'store'])->name('offers.store');
+    });
+
 });
